@@ -62,4 +62,13 @@ router.delete("/windows", async (req, res) => {
   res.json({ ok: true });
 });
 
+// POST /api/settings/pin  – verify manager PIN (compared against MANAGER_PIN env var)
+router.post("/pin", (req, res) => {
+  const { pin } = req.body;
+  const correct = process.env.MANAGER_PIN;
+  if (!correct) return res.status(503).json({ error: "MANAGER_PIN not configured." });
+  if (!pin || pin !== correct) return res.status(403).json({ error: "Wrong PIN." });
+  res.json({ ok: true });
+});
+
 module.exports = router;
