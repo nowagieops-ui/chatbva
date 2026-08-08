@@ -43,4 +43,10 @@ app.get("*", (req, res) =>
 // Boot: init DB schema then start listening
 initSchema()
   .then(() => app.listen(PORT, () => console.log(`BVA Open Line on port ${PORT}`)))
-  .catch(err => { console.error("DB init failed:", err.message); process.exit(1); });
+  .catch(err => {
+    console.error("===== STARTUP FAILED =====");
+    console.error("Reason:", err.message);
+    console.error("Check DB_HOST, DB_NAME, DB_USER, DB_PASS env vars in hPanel.");
+    console.error("Full error:", err);
+    process.exit(1);
+  });
