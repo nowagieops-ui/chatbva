@@ -228,6 +228,16 @@
 
   <section id="view-manager" hidden>
     <div class="col">
+      <div id="mgr-gate" style="max-width:360px">
+        <h2 class="panel-head">Manager access</h2>
+        <p class="panel-note">Enter the manager PIN to continue.</p>
+        <div class="inline">
+          <div class="field"><label class="lab" for="mgrPin">PIN</label><input type="password" id="mgrPin" autocomplete="off" placeholder="••••••"></div>
+          <button class="btn" id="mgrPinBtn">Enter</button>
+        </div>
+        <div id="mgrPinMsg"></div>
+      </div>
+      <div id="mgr-inner" hidden>
       <div id="setupScreen" hidden>
         <h2 class="panel-head">Set up the lock</h2>
         <p class="panel-note">This creates the key that staff messages are sealed to. Choose a passphrase only you know.</p>
@@ -333,6 +343,7 @@
           <div id="setupMsg2"></div>
         </div>
       </div>
+    </div><!-- /mgr-inner -->
     </div>
   </section>
 
