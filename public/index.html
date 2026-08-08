@@ -115,6 +115,7 @@
     .brand{gap:12px}
     .brand img{height:54px}
     .cols{grid-template-columns:1fr}
+    .inline{flex-direction:column}
     .col + .col{border-left:0;border-top:2px solid var(--ink)}
     .masthead h1{font-size:22px}
   }
@@ -194,7 +195,7 @@
         <h2 class="panel-head">Your one to one</h2>
         <p class="panel-note">Pick one slot from the open times below. This part is <b>not</b> anonymous — your name goes on the sheet so I know who I'm meeting.</p>
         <div id="myBooking"></div>
-        <div class="inline" style="margin-bottom:18px">
+        <div style="margin-bottom:18px">
           <div class="field">
             <label class="lab" for="empName">Your name</label>
             <input type="text" id="empName" placeholder="First and last" autocomplete="name">
@@ -203,7 +204,7 @@
             <label class="lab" for="empEmail">Email for confirmation (optional)</label>
             <input type="email" id="empEmail" placeholder="Your booking details will be sent here" autocomplete="email">
           </div>
-          <div class="field">
+          <div class="field" style="margin-top:14px">
             <label class="lab">How long</label>
             <div class="chips" id="durChips">
               <button class="chip" data-dur="30" aria-pressed="true">30 min</button>
