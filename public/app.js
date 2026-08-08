@@ -85,7 +85,15 @@ $(".tabs").addEventListener("click", e=>{
   const v=b.getAttribute("data-view");
   $("#view-staff").hidden  = v!=="staff";
   $("#view-manager").hidden= v!=="manager";
-  if(v==="manager") refresh().then(gate);
+  if(v==="manager"){
+    // Show PIN gate; inner content stays hidden until PIN is verified
+    if(!window._mgrUnlocked){
+      $("#mgr-gate").hidden=false;
+      $("#mgr-inner").hidden=true;
+    } else {
+      refresh().then(gate);
+    }
+  }
 });
 document.querySelector(".subtabs").addEventListener("click", e=>{
   const b=e.target.closest("button[data-sub]"); if(!b) return;
@@ -268,6 +276,29 @@ async function cancelBooking(key, quiet=false){
     flash($("#bookMsg"),e.message||"Couldn't cancel.",true);
   }
 }
+
+// ── Manager PIN gate ─────────────────────────────────────────────────────────
+async function checkMgrPin(pin){
+  const r = await fetch("/api/settings/pin", {
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body: JSON.stringify({pin})
+  });
+  return r.ok;
+}
+$("#mgrPinBtn").addEventListener("click", async function(){
+  const pin = $("#mgrPin").value;
+  if(!pin){ flash($("#mgrPinMsg"),"Enter the PIN.",true); return; }
+  const btn=this; btn.disabled=true;
+  const ok = await checkMgrPin(pin);
+  if(!ok){ flash($("#mgrPinMsg"),"Wrong PIN.",true); btn.disabled=false; $("#mgrPin").value=""; return; }
+  window._mgrUnlocked=true;
+  $("#mgr-gate").hidden=true;
+  $("#mgr-inner").hidden=false;
+  btn.disabled=false;
+  refresh().then(gate);
+});
+$("#mgrPin").addEventListener("keydown", e=>{ if(e.key==="Enter") $("#mgrPinBtn").click(); });
 
 // ── Manager gate ──────────────────────────────────────────────────────────────
 function gate(){
