@@ -4,12 +4,19 @@ let pool = null;
 
 function getPool() {
   if (pool) return pool;
+  const host = process.env.DB_HOST || "localhost";
+  const port = parseInt(process.env.DB_PORT || "3306");
+  const user = process.env.DB_USER;
+  const password = process.env.DB_PASS;
+  const database = process.env.DB_NAME;
+  // Log connection details (password length only, never the value)
+  console.log(`DB connecting: host=${host} port=${port} user=${user} database=${database} password_length=${password ? password.length : 0}`);
   pool = mysql.createPool({
-    host:     process.env.DB_HOST     || "localhost",
-    port:     parseInt(process.env.DB_PORT || "3306"),
-    user:     process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
+    host: "127.0.0.1",   // force IPv4 — avoids ::1 vs localhost ambiguity
+    port,
+    user,
+    password,
+    database,
     waitForConnections: true,
     connectionLimit: 10,
     charset: "utf8mb4",
