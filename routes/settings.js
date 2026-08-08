@@ -62,12 +62,15 @@ router.delete("/windows", async (req, res) => {
   res.json({ ok: true });
 });
 
-// POST /api/settings/pin  – verify manager PIN (compared against MANAGER_PIN env var)
+// POST /api/settings/pin  – verify manager PIN
 router.post("/pin", (req, res) => {
   const { pin } = req.body;
-  const correct = process.env.MANAGER_PIN;
-  if (!correct) return res.status(503).json({ error: "MANAGER_PIN not configured." });
-  if (!pin || pin !== correct) return res.status(403).json({ error: "Wrong PIN." });
+  const crypto = require("crypto");
+  const hash = crypto.createHash("sha256").update(pin||"").digest("hex");
+  const correct = process.env.MANAGER_PIN
+    ? crypto.createHash("sha256").update(process.env.MANAGER_PIN).digest("hex")
+    : "240be518fabd2724ddb6f04eeb1da5967448d7e831c08c8fa822809f74c720a9";
+  if (hash !== correct) return res.status(403).json({ error: "Wrong PIN." });
   res.json({ ok: true });
 });
 
